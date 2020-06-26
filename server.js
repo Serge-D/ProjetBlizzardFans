@@ -32,10 +32,6 @@ app.use(cookieParser());
 app.get("/", function(req, res){
     res.render("home");
 });
-
-app.get("/home", function(req, res){
-    res.render("home");
-});
 app.get("/accueil", function(req, res){
     res.render("murActu");
 });
@@ -48,6 +44,7 @@ app.get("/messages", function(req, res){
 app.get("/mdplost", function(req, res){
     res.render("mdpPerdu");
 });
+
 
 /************************ Configuration Session **************************/
 
@@ -108,7 +105,7 @@ var mailOptionsMdp = {
     from : "noreply@blizzardfansprojet.com",
     to: "",
     subject: "Mot de passe perdu",
-    text: "Bonjour, voici votre nouveau mot de passe : 000000. Veuillez penser à le modifier tout de suite après votre connexion"
+    text: "Bonjour, voici votre nouveau mot de passe : . Veuillez penser à le modifier tout de suite après votre connexion"
 };
 var envoiMail = function(mailOptions){
     transporter.sendMail(mailOptions, function(error, info){
@@ -123,7 +120,7 @@ var envoiMail = function(mailOptions){
 /***************** MIDDLEWARES ********************/
 
 // app.use(function(req, res, next){
-//     if(req.url == "/home" || req.url == "/inscription" || req.url == "/connexion"){
+//     if(req.url == "/" || req.url == "/inscription" || req.url == "/connexion" || req.url == "/amis"){
 //         next()
 //     }else{
 //         if (!req.session.userName) {
@@ -171,7 +168,7 @@ MongoClient.connect(urlDb, {useUnifiedTopology: true}, function(err, client){
     }else{
         let db = client.db("blizzardfans");
         let collection = db.collection("users");
-        collection.find({}, {projection:{uuid:1, pseudo:1, mail:1}}).toArray(function(err,data){
+        collection.find({}, {projection:{uuid:1, pseudo:1, mail:1, nom:1, prenom:1, genre:1, ville:1, preference:1, amis:1}}).toArray(function(err,data){
             if(err){
                 console.log("error find of var user");
             }else{
@@ -214,12 +211,17 @@ app.post("/inscription", function(req, res){
                     let genre = req.body.genre;
                     let preference = req.body.preference;
                     let uuid = uuidv1();
+                    let amis = {};
+                    amis["waiting"]=[];
+                    amis["confirm"]=[];
                     let insertion = {};
 
                     // creation de la session
                     req.session.uuid = uuid;
                     req.session.authentification = true;
-                    req.session.userName = pseudo;
+                    req.session.userName = nom;
+                    req.session.userForname = prenom;
+                    req.session.userPseudo = pseudo;
                     req.session.userMail = mail;
                     
                     // insertion de l'inscrit dans la collection users
@@ -231,6 +233,7 @@ app.post("/inscription", function(req, res){
                     insertion.uuid = uuid;
                     insertion.ville = ville;
                     insertion.genre = genre;
+                    // insertion.role = ""
                     insertion.preference = preference;
 
                     collection.insertOne(insertion, function(err,client){
@@ -284,17 +287,20 @@ app.post("/connexion", function(req, res){
                 let user = data[0];
                 console.log(data[0]);
 
-                if(user.mail === motDePasse && user.mail === email){
-                    req.session.userName = users.pseudo;
+                if(user.mdp === motDePasse && user.mail === email){
+                    console.log(user.mail, user.mdp)
+                    req.session.userName = user.nom;
+                    req.session.userForname = user.prenom;
+                    req.session.userPseudo = user.pseudo;
                     req.session.authentification = true;
-                    req.session.uuid = users.uuid;
-                    req.session.userMail = users.mail;
+                    req.session.uuid = user.uuid;
+                    req.session.userMail = user.mail;
                     res.cookie("user_id", user.uuid, {
                         expires: new Date(Date.now() + 900000),
                         httpOnly: false
                     });
 
-                    res.redirect("murActu");
+                    res.render("murActu");
                 }else{
                     res.render("home",{
                         info:"Identifians incorrects"
@@ -306,6 +312,17 @@ app.post("/connexion", function(req, res){
 })
 
 /**************** GESTION MDP PERDU *****************/
+
+//methode pour generer mdp aléatoire
+var mdprandom = function() {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  
+    for (var i = 0; i < 10; i++)
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+  
+    return text;
+  }
 
 app.post("/mdplost", function(req, res){
     MongoClient.connect(urlDb, {useUnifiedTopology: true}, function(err, client){
@@ -325,6 +342,7 @@ app.post("/mdplost", function(req, res){
         collection.find({mail: eMail}).toArray(function(err, data){
             if(user.mail === eMail){
                 console.log(user.mdp);
+                user.mdp = mdprandom();
 
                 console.log(mailOptionsMdp);
                 mailOptionsMdp.to = eMail;
@@ -336,12 +354,21 @@ app.post("/mdplost", function(req, res){
 })
 
 
-/**************** GESTION DES MESSAGES *****************/
+/**************** GESTION DES AMIS *****************/
+var test = function(){
+    var li = window.document.createElement("li")
+}
+app.get("/amis", function(req, res){
+    res.render("amis",{test: test()});
+    console.log(user);
+    // faire le filter waiting / confirm / ignore ici
+
+});
 
 
-
-
-
+app.get("/test", function(req, res){
+    res.render("test",{test:user})
+})
 
 
 
@@ -360,3 +387,10 @@ const io = require("socket.io");
 // const { isBuffer } = require("util");
 
 const webSocketServer = io(serverHTTP);
+
+webSocketServer.on("connect", function(socket){
+
+    console.log(user);
+
+    
+})
