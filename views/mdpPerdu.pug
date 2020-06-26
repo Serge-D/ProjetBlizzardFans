@@ -1,0 +1,16 @@
+include includes/header.pug
+
+header.bg-secondary.p-4
+  .container
+    h1 BlizzardFan&apos;s
+section.container
+  #formMdpLost.card.mt-5.p-0
+    h2.card-header.bg-secondary.text-white Mot de passe perdu
+    .card-body.text-center
+      | Veuillez saisir votre adresse mail, si cette derni&egrave;re est valide, nous vous renvoyez un nouveau mot passe
+    .card-body
+      form(action='mdplost' method='POST')
+        label(for='mail') Votre adresse mail
+        input.form-control(type='email' name='mail')
+        button.btn.bg-secondary.text-white.mt-1(type='submit') Valider
+      p= erreurSaisie 

@@ -1,0 +1,69 @@
+include includes/header.pug 
+
+header.bg-secondary.p-4
+  .container
+    h1 BlizzardFan&apos;s
+#jumbo.jumbotron.text-white.bg-dark.pb-2
+  .container
+    h1.display-4 Bienvenue sur BlizzardFan&apos;s
+    p.lead
+      | Vous &ecirc;tes fans des jeux Blizzard tel que World of Warcraft, HearthStone ou Diablo et vous voulez partager cette passion avec d&apos;autres personnes ? Vous &ecirc;tes au bon endroit ! Inscrivez vous et partager vos avis, vos exp&eacute;riences avec d&apos;autres joueurs !
+.container
+  section.row.justify-content-around
+    .border-secondary.col-md-4
+      #formConnexion.card.mt-4.p-0
+        h3.card-header.bg-dark.text-white Connexion
+      .card-body
+          form(action='connexion' method='POST')
+            .form-group
+              label(for='mail') Adresse e-mail
+              input.form-control(type='email' name='mail')
+            .form-group
+              label(for='mdp') Mot de passe
+              input.form-control(type='password' name='mdp')
+              .form-text.text-muted
+                a(href='/mdplost') Vous avez oubli&eacute; votre Mot de passe
+            button.btn.bg-secondary.text-white(type='submit') Connexion
+          p.text-danger.mt-1=info
+    #formInscription.card.mt-4.border-secondary.p-0.col-md-5
+      h3.card-header.bg-dark.text-white Inscription
+      .card-body
+        form(action='inscription' method='POST')
+          .form-group
+            label(for='pseudo') Pseudo
+            input.form-control(type='text' name='pseudo')
+          .form-row
+            .col
+              .form-group
+                label(for='nom') Nom
+                input.form-control(type='text' name='nom')
+            .col
+              .form-group
+                label(for='prenom') Pr&eacute;nom
+                input.form-control(type='text' name='prenom')
+          .form-group
+            label(for='adresseMail') E-mail
+            input.form-control(type='email' name='adresseMail')
+          .form-group
+            label(for='ville') Ville
+            input.form-control(type='text' name='ville')
+          .form-group
+            label(for="genre") Genre
+            input.form-control(type="text" name="genre" placeholder="Homme, Femme ou Autre")
+          .form-group
+            label(for='motDePasse') Mot de passe
+            input.form-control(type='password' name='motDePasse' placeholder='Créer votre mot de passe')
+          .form-group
+            label(for='preference') Pr&eacute;f&eacute;rence
+            select#pref.custom-select(name='preference')
+              option(selected='') Choissisez votre jeu Blizzard pr&eacute;f&eacute;r&eacute;
+              option(value='World of Warcraft') World of Warcraft
+              option(value='HearthStone') HearthStone
+              option(value='Diablo') Diablo
+              option(value='StarCraft') StarCraft
+              option(value='Heroes of the Storm') Heroes of the Storm
+              option(value='Owerwatch') Owerwatch
+              option(value='Warcraft III') Warcraft III
+          button.btn.bg-secondary.text-white(type='submit') S&apos;inscrire
+        p.text-danger.mt-1= message
+script(src="/js/home.js")

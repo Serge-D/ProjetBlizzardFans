@@ -1,0 +1,49 @@
+include includes/header.pug
+
+header.bg-secondary.p-2
+  nav.navbar.navbar-expand-lg.navbar-dark
+    .navbar-brand
+      | BlizzardFan&apos;s
+    .container
+      ul.navbar-nav.mr-auto
+        li.nav-item
+          a.nav-link(href='/accueil') Accueil
+        li.nav-item
+          a.nav-link(href='/profil') Profil
+        li.nav-item
+          a.nav-link(href='/messages') Messages
+      form.form-inline.my-2.my-md-0(action='searchBar' method='GET')
+        input.form-control.mr-sm-2(type='search' name='' placeholder='Chercher' aria-label='Search')
+        button.btn.bg-light.my-2.my-sm-0(type='submit') Chercher
+      button.btn.btn-danger.btn-sm.ml-4
+        | D&eacute;connexion
+.container-fluid
+  .row.justify-content-around
+    section.col-md-4
+      .card.mt-4.p-0
+        .card-header.bg-secondary
+          | Amis
+        .card-body
+          | Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nisi consequuntur voluptates necessitatibus, dicta dignissimos tempora quia cumque hic sit, odio illum excepturi officiis quam sapiente sunt, placeat dolores temporibus eligendi.
+          | Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, hic! Consequuntur et quidem vel voluptas molestiae voluptate obcaecati dolorum inventore, adipisci perferendis. Dicta iste amet perspiciatis necessitatibus sapiente deserunt possimus.
+      .card.mt-4.p-0
+        .card-header.bg-primary
+          | Photos
+        .card-body
+          | Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nisi consequuntur voluptates necessitatibus, dicta dignissimos tempora quia cumque hic sit, odio illum excepturi officiis quam sapiente sunt, placeat dolores temporibus eligendi.
+          | Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, hic! Consequuntur et quidem vel voluptas molestiae voluptate obcaecati dolorum inventore, adipisci perferendis. Dicta iste amet perspiciatis necessitatibus sapiente deserunt possimus.
+    section.col-lg-6
+      .card.mt-4.p-0
+        .card-header
+          h6 Publications
+        .card-body
+          form(action='' method='POST')
+            .form-group
+              label(for='actuProfil') Nouvelle Publification
+              input.form-control(type='text' name='actuProfil' placeholder='Que voulez vous dire')
+        .card-body
+          | Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum, atque excepturi commodi quaerat magnam mollitia hic consectetur rem amet porro omnis, facilis veritatis doloremque voluptatum odit, exercitationem ipsam iure temporibus!
+          | Libero, voluptates harum. Optio qui, dolor doloremque minima, dolorum obcaecati quia nemo quo corporis, cupiditate in magni rem laudantium. Laboriosam quia fugit ducimus in impedit aperiam porro explicabo cumque soluta.
+          | Veniam consequuntur aspernatur modi aut obcaecati rem, harum velit et illum molestias laudantium vitae eligendi animi sit placeat ducimus! Adipisci quibusdam alias ea omnis consequatur, aut deleniti doloribus soluta sed?
+          | Ratione impedit alias numquam nisi! Qui animi nisi eos ipsum illum accusamus porro corrupti fugit. Ipsam, dolorum dolores esse delectus labore dolore, dignissimos expedita, illo deleniti cupiditate error provident veniam.
+          | Non error totam, sapiente quasi, reiciendis, debitis soluta nesciunt pariatur tempora necessitatibus adipisci amet voluptate laborum. Sequi, excepturi optio ipsum, velit provident at, repudiandae rem officiis ipsam expedita odio incidunt.
