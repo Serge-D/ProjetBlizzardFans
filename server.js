@@ -56,7 +56,7 @@ var sessionLife = 60*60*1000;
 
 const options = {
     store: new MongoStore({
-        url : "mongodb://localhost:27017/blizzardfans" 
+        url : "mongodb+srv://admin:Sergio94@blizzardfans-1t2aw.mongodb.net/Blizzardfans" 
     }),
     secret: "1234Secret",
     saveUninitialized: true,
@@ -73,7 +73,7 @@ app.use(expressSession(options))
 
 /***********************************/
 
-const urlDb = "mongodb+srv://admin:Sergio94@blizzardfans-1t2aw.mongodb.net/<dbname>?retryWrites=true&w=majority"
+const urlDb = "mongodb+srv://admin:Sergio94@blizzardfans-1t2aw.mongodb.net/Blizzardfans?retryWrites=true&w=majority"
 const nameDb = "Blizzardfans";
 
 
