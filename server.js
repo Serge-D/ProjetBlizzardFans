@@ -253,7 +253,7 @@ app.post("/inscription", function(req, res){
                             console.log(mailOptionsInscription);
                             envoiMail(mailOptionsInscription);
 
-                            res.redirect("murActu");
+                            res.render("murActu");
 
                         }
                     })
