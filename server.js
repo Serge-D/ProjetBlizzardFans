@@ -350,12 +350,12 @@ app.post("/mdplost", function(req, res){
                 user.mdp = password;
 
                 console.log(mailOptionsMdp);
-                mailOptionsMdp.text= "Bonjour, voici votre nouveau mot de passe : "+ user.mdp +" . Veuillez penser à le modifier tout de suite après votre connexion"
+                mailOptionsMdp.text= "Bonjour, voici votre nouveau mot de passe : \n"+ user.mdp +" Veuillez penser à le modifier tout de suite après votre connexion"
                 mailOptionsMdp.to = eMail;
                 console.log(mailOptionsMdp);
                 envoiMail(mailOptionsMdp);
                 
-                res.redirect("/home")
+                res.redirect("home")
             }
         })
     })
