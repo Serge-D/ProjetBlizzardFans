@@ -73,8 +73,8 @@ app.use(expressSession(options))
 
 /***********************************/
 
-const urlDb = "mongodb://localhost:27017";
-const nameDb = "blizzardfans";
+const urlDb = "mongodb+srv://admin:Sergio94@blizzardfans-1t2aw.mongodb.net/<dbname>?retryWrites=true&w=majority"
+const nameDb = "Blizzardfans";
 
 
 /**************** GESTION NODEMAILER ******************/
