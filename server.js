@@ -349,7 +349,7 @@ app.post("/mdplost", function(req, res){
         let db = client.db(nameDb);
         let collection = db.collection("users");
         let eMail = req.body.mail;
-
+        console.log("test")
         collection.find({mail: eMail}).toArray(function(err, data){
             if(user.mail === eMail){
                 console.log(user.mdp);
@@ -361,7 +361,7 @@ app.post("/mdplost", function(req, res){
                 console.log(mailOptionsMdp);
                 envoiMail(mailOptionsMdp);
                 
-                res.redirect("/")
+                res.redirect("/home")
             }
         })
     })
