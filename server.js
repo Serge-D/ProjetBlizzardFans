@@ -217,9 +217,11 @@ app.post("/inscription", function(req, res){
                     let genre = req.body.genre;
                     let preference = req.body.preference;
                     let uuid = uuidv1();
-                    let amis = {};
-                    amis["waiting"]=[];
-                    amis["confirm"]=[];
+                    let friends = {};
+                    friends["waiting"]=[];
+                    friends["confirm"]=[];
+                    friends["ignored"]=[];
+                    let role = "Utilisateur";
                     let insertion = {};
 
                     // creation de la session
@@ -229,6 +231,7 @@ app.post("/inscription", function(req, res){
                     req.session.userForname = prenom;
                     req.session.userPseudo = pseudo;
                     req.session.userMail = mail;
+                    req.session.role = role;
                     
                     // insertion de l'inscrit dans la collection users
                     insertion.pseudo = pseudo;
@@ -239,7 +242,7 @@ app.post("/inscription", function(req, res){
                     insertion.uuid = uuid;
                     insertion.ville = ville;
                     insertion.genre = genre;
-                    // insertion.role = ""
+                    insertion.role = role;
                     insertion.preference = preference;
 
                     collection.insertOne(insertion, function(err,client){
