@@ -354,7 +354,8 @@ app.post("/mdplost", function(req, res){
                 mailOptionsMdp.to = eMail;
                 console.log(mailOptionsMdp);
                 envoiMail(mailOptionsMdp);
-                
+                console.log(data[0].mail)
+
                 res.redirect("home")
             }
         })
