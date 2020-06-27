@@ -93,10 +93,6 @@ var transporter = nodemailer.createTransport({
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED ='0';
 
-var password = generator.generate({
-    length: 10,
-    numbers: true
-});
 
 var mailOptionsInscription = { //faire plusieurs var confirmation inscription
     from : "noreply@blizzardfansprojet.com",
@@ -334,7 +330,10 @@ app.post("/mdplost", function(req, res){
                 erreur: "Veuillez entrer votre adresse mail"
             });
         }
-
+        var password = generator.generate({
+            length: 10,
+            numbers: true
+        });
 
         let db = client.db(nameDb);
         let collection = db.collection("users");
