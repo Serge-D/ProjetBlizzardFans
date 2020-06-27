@@ -30,6 +30,7 @@ window.addEventListener("DOMContentLoaded", function(){
             preferenceP.innerHTML = user.preference;
         };
         
+        
 
         ioClient.on("infosUser",function(user){
             console.log(user);

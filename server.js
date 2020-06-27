@@ -400,9 +400,27 @@ const io = require("socket.io");
 
 const webSocketServer = io(serverHTTP);
 
-webSocketServer.on("connect", function(socket){
+const connectedPeople = [];
+    
 
+webSocketServer.on("connect", function(socket){
+    
     console.log(user);
-    console.log("test heroku")
+    console.log(socket)
+
+    
+    socket.emit("peopleLogIn", connectedPeople.length);
+    
+    socket.on("login", function(){
+        const utilisateur = {
+            id: socket.id,
+            pseudo: ""
+        };
+        connectedPeople.push(utilisateur)
+    })
+
+    socket.on("affichageProfil", function(){
+
+    })
     
 })
