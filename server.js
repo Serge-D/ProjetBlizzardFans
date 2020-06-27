@@ -434,7 +434,7 @@ webSocketServer.on("connect", function(socket){
     console.log(socket);
 
 /****************************************************** */    
-    socket.emit("peopleLogIn", connectedPeople.length);
+    socket.emit("peopleLogIn", connectedPeople);
     console.log(session.pseudo)
     socket.on("login", function(){
         const utilisateur = {
