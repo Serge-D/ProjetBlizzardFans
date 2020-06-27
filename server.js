@@ -124,7 +124,7 @@ var envoiMail = function(mailOptions){
 };
 
 /***************** MIDDLEWARES ********************/
-
+//utiliser pour les pages admins / invités / inscrits
 // app.use(function(req, res, next){
 //     if(req.url == "/" || req.url == "/inscription" || req.url == "/connexion" || req.url == "/amis"){
 //         next()
@@ -290,10 +290,9 @@ app.post("/connexion", function(req, res){
 
         collection.find({mail : email}).toArray(function(err, data){
             console.log(data)
-            if(err){
+            if(err || data.length === 0){
                 console.log("erreur niveau connexion");
-            }
-            if(data.length){
+            }else{
                 let user = data[0];
                 console.log(data[0]);
 

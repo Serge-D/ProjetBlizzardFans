@@ -14,7 +14,8 @@ var preferenceP = window.document.getElementById("profilPreference");
 
 window.addEventListener("DOMContentLoaded", function(){
 
-    ioClient = io("https://blizzardfans.herokuapp.com/",{reconnection: true});
+    // ioClient = io("https://blizzardfans.herokuapp.com/",{reconnection: true});
+    ioClient = io("localhost:8080",{reconnection: true});
 
     ioClient.on("connect",function(){
         console.log("Connecté au serveur");
@@ -33,10 +34,10 @@ window.addEventListener("DOMContentLoaded", function(){
 
         ioClient.on("infosUser",function(user){
             console.log(user);
-            affichageProgil(user)
+            affichageProfil(user)
         })
 
-
+        // ioClient.
         /******************* messages client *******************************/
         // webSocket.addEventListener("message", function(event) {
         //     var chatData = JSON.parse(event.data);
