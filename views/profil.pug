@@ -15,22 +15,22 @@ header.bg-secondary.p-2
       form.form-inline.my-2.my-md-0(action='searchBar' method='GET')
         input.form-control.mr-sm-2(type='search' name='' placeholder='Chercher' aria-label='Search')
         button.btn.bg-light.my-2.my-sm-0(type='submit') Chercher
-      button.btn.btn-danger.btn-sm.ml-4
-        | D&eacute;connexion
+      button#btndisconnect.btn.btn-danger.btn-sm.ml-4
+          a.text-white(href="/logout") D&eacute;connexion
 .card.mb-1.mt-2.container.pb-2(style='max-width: 540px;')
   .row.no-gutters
     .col-md-4
       
     .col-md-8
       .card-body
-        #profilPseudo.card-title 
+        #profilPseudo.card-title=pseudo 
         div
-          span#profilNom.mr-5 
-          span#profilPrenom 
-        #profilGenre 
-        #profilMail 
-        #profilVille 
-        #profilPreference  
+          span#profilNom.mr-5=nom 
+          span#profilPrenom=prenom 
+        #profilGenre=genre 
+        #profilMail=mail 
+        #profilVille=ville 
+        #profilPreference=preference  
 .container-fluid
   .row.justify-content-around
     section.col-md-4
@@ -62,4 +62,4 @@ header.bg-secondary.p-2
           | Ratione impedit alias numquam nisi! Qui animi nisi eos ipsum illum accusamus porro corrupti fugit. Ipsam, dolorum dolores esse delectus labore dolore, dignissimos expedita, illo deleniti cupiditate error provident veniam.
           | Non error totam, sapiente quasi, reiciendis, debitis soluta nesciunt pariatur tempora necessitatibus adipisci amet voluptate laborum. Sequi, excepturi optio ipsum, velit provident at, repudiandae rem officiis ipsam expedita odio incidunt.
 
-footer
+include includes/footer.pug

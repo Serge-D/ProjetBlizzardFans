@@ -36,9 +36,6 @@ app.get("/", function(req, res){
 app.get("/accueil", function(req, res){
     res.render("murActu");
 });
-app.get("/profil", function(req,res){
-    res.render("profil");
-});
 app.get("/messages", function(req, res){
     res.render("messages");
 });
@@ -365,6 +362,27 @@ app.post("/mdplost", function(req, res){
     })
 })
 
+/****************** GESTION AFFICHAGE PROFIL *****************/
+
+app.get("/profil", function(req,res){
+    MongoClient.connect(urlDb, {useUnifiedTopology: true}, function(err, client){
+        if(err){
+            console.log("erreur connect mongo");
+        }
+        let db = client.db(nameDb);
+        let collection = db.collection("users");
+        let uuidUser = req.session.uuid
+        collection.find({uuid : uuidUser}).toArray(function(err, data){
+            if(err){
+                console.log("Error !")
+            }
+            
+            res.render("profil",{pseudo:data[0].pseudo,nom:data[0].nom, prenom:data[0].prenom, mail:data[0].mail, ville:data[0].ville,preference:data[0].preference });
+        })
+    })
+    
+});
+
 
 /**************** GESTION DES AMIS *****************/
 var test = function(){
@@ -381,6 +399,18 @@ app.get("/amis", function(req, res){
 app.get("/test", function(req, res){
     res.render("test",{test:user})
 })
+
+
+
+/******************* GESTION DECONNEXION *******************/
+
+
+app.get("/logout", function(req, res){
+    req.session.destroy(function(err){
+        console.log("error destroy session");
+        res.render("home");
+    })
+});
 
 
 /***************** GESTION DU CHAT ******************/
@@ -418,6 +448,7 @@ const serverHTTP = app.listen(process.env.PORT || 8080, function(){
 });
 
 const io = require("socket.io");
+const session = require("express-session");
 // const e = require("express");
 // const { isBuffer } = require("util");
 
@@ -428,23 +459,29 @@ const connectedPeople = [];
 
 webSocketServer.on("connect", function(socket){
     
-    console.log(user);
-    console.log(session)
-    console.log(socket);
-
+    console.log("socket id");
+    console.log(socket.id);
 /****************************************************** */    
     socket.emit("peopleLogIn", connectedPeople);
-    console.log(session.pseudo)
+    
     socket.on("login", function(){
         const utilisateur = {
             id: socket.id,
-            pseudo: ""
+            pseudo: user.pseudo
         };
+        console.log("/////////")
+        console.log(utilisateur)
         connectedPeople.push(utilisateur)
     })
 /******************************************************** */
-    socket.on("infosUser", function(){
-        socket.emit(user)
+    socket.emit("infosUser", function(){
+        MongoClient.connect(urlDb, {useUnifiedTopology:true}, function(err, client){
+            if(err){
+                console.log("pb de connexion")
+            }
+            let db = client.db(nameDb);
+            let collection = db.collection("user");
+        })
     });
 
 
@@ -475,3 +512,13 @@ webSocketServer.on("connect", function(socket){
     })
     
 })
+
+
+/***************************************************
+ * 
+ * pour la gestion des roles, faire des middlewares avec le req.session.role et afficher les pages ou non en fonction du role
+ * creer un pug avec page error 404 pour ceux qui ne peuvent pas voir les pages
+ * 
+ * 
+ * 
+*/

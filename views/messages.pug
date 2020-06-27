@@ -16,7 +16,7 @@ header.bg-secondary.p-2
         input.form-control.mr-sm-2(type='search' name='' placeholder='Chercher' aria-label='Search')
         button.btn.bg-light.my-2.my-sm-0(type='submit') Chercher
       button.btn.btn-danger.btn-sm.ml-4
-        | D&eacute;connexion
+        a.text-white(href="/logout") D&eacute;connexion
 h1 Chat WebSocket
 form#formulaire
   p=pseudonyme
@@ -26,11 +26,11 @@ form#formulaire
   p
     input(type='submit', value='Envoyer')
 #messages
-  each document in documents
-    p
-       b=pseudonyme
-       dit : 
-       i=document.message
+  //- each document in documents
+  //-   p
+  //-      b=pseudonyme
+  //-      dit : 
+  //-      i=document.message
 
 
 script(src="/js/profil.js")
