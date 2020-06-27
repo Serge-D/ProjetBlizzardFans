@@ -77,6 +77,7 @@ const urlDb = "mongodb+srv://admin:Sergio94@blizzardfans-1t2aw.mongodb.net/Blizz
 const nameDb = "Blizzardfans";
 
 
+
 /**************** GESTION NODEMAILER ******************/
 
 var transporter = nodemailer.createTransport({
