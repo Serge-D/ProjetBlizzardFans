@@ -331,7 +331,7 @@ app.post("/mdplost", function(req, res){
         }
         if(req.body.mail === ""){
             res.render("/mdpPerdu", {
-                erreurSaisie: "Veuillez entrer votre adresse mail"
+                erreur: "Veuillez entrer votre adresse mail"
             });
         }
 
@@ -342,7 +342,10 @@ app.post("/mdplost", function(req, res){
         console.log("test")
         collection.find({mail: eMail}).toArray(function(err, data){
             console.log(data, err)
-            if(data === eMail){
+            if(data.length === 0){
+                res.render("/mdpPerdu",{erreur : "Erreur"})
+            }
+            if(data[0].mail === eMail){
                 console.log(user.mdp);
                 user.mdp = password();
 

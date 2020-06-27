@@ -13,4 +13,5 @@ section.container
         label(for='mail') Votre adresse mail
         input.form-control(type='email' name='mail')
         button.btn.bg-secondary.text-white.mt-1(type='submit') Valider
-      p= erreurSaisie 
+      p.text-danger.mt-1= erreur
+      p.text-success= valide
