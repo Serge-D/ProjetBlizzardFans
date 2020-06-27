@@ -323,16 +323,6 @@ app.post("/connexion", function(req, res){
 
 /**************** GESTION MDP PERDU *****************/
 
-//methode pour generer mdp aléatoire
-var mdprandom = function() {
-    var text = "";
-    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  
-    for (var i = 0; i < 10; i++)
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-  
-    return text;
-  }
 
 app.post("/mdplost", function(req, res){
     MongoClient.connect(urlDb, {useUnifiedTopology: true}, function(err, client){
@@ -351,7 +341,8 @@ app.post("/mdplost", function(req, res){
         let eMail = req.body.mail;
         console.log("test")
         collection.find({mail: eMail}).toArray(function(err, data){
-            if(user.mail === eMail){
+            console.log(data, err)
+            if(data === eMail){
                 console.log(user.mdp);
                 user.mdp = password();
 
