@@ -360,7 +360,8 @@ app.post("/mdplost", function(req, res){
                 mailOptionsMdp.to = eMail;
                 console.log(mailOptionsMdp);
                 envoiMail(mailOptionsMdp);
- 
+                
+                res.redirect("/")
             }
         })
     })
