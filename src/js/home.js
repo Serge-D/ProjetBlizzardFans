@@ -4,7 +4,7 @@
 
 window.addEventListener("DOMContentLoaded", function(){
 
-    ioClient = io("",{reconnection: true});
+    ioClient = io("https://blizzardfans.herokuapp.com/",{reconnection: true});
 
     ioClient.on("connect",function(){
 

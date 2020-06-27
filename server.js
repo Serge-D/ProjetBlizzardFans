@@ -244,6 +244,7 @@ app.post("/inscription", function(req, res){
                     insertion.genre = genre;
                     insertion.role = role;
                     insertion.preference = preference;
+                    insertion.friends = friends;
 
                     collection.insertOne(insertion, function(err,client){
                         if(err){
@@ -383,6 +384,29 @@ app.get("/test", function(req, res){
 })
 
 
+/***************** GESTION DU CHAT ******************/
+
+app.get("/messages", function(req, res){
+    console.log(user)
+    MongoClient.connect(urlDb, {useUnifiedTopology: true}, function(err, client){
+        if(err){
+            console.log("Cannot connect to database");
+        }else{
+            const db = client.db(nameDb);
+            const collection = db.collection("messages");
+
+            collection.find().toArray(function(err, data){
+                if(err){
+                    console.log("unable to fetch documents");
+                }else{
+                    console.log("rendering...");
+                    res.render("messages",{documents: data, pseudonyme: user.pseudo})
+                }
+            })
+        }
+    })
+})
+
 
 /***************************
  * 
@@ -406,11 +430,12 @@ const connectedPeople = [];
 webSocketServer.on("connect", function(socket){
     
     console.log(user);
-    console.log(socket)
+    console.log(session)
+    console.log(socket);
 
-    
+/****************************************************** */    
     socket.emit("peopleLogIn", connectedPeople.length);
-    
+    console.log(session.pseudo)
     socket.on("login", function(){
         const utilisateur = {
             id: socket.id,
@@ -418,9 +443,36 @@ webSocketServer.on("connect", function(socket){
         };
         connectedPeople.push(utilisateur)
     })
+/******************************************************** */
+    socket.on("infosUser", function(){
+        socket.emit(user)
+    });
 
-    socket.on("affichageProfil", function(){
 
+/********************************************************* */
+
+    socket.on("messages", function(webSocketData){
+        var chatData = JSON.parse(webSocketData.utf8Data);
+
+        MongoClient.connect(urlDb, {useUnifiedTopology: true}, function(err, client){
+            if(err){
+                console.log("erreur connect");
+            } else {
+
+                let db = client.db(nameDb);
+                let collection = db.collection("messages");
+                if(chatData && chatData.hasOwnProperty("message")){
+                    collection.insertOne(chatData)
+                } else{
+                    console.log("Missing property in chat data")
+                }
+            }
+        })
+
+        const chatDataAsString = JSON.stringify(chatData);
+        establishedSockets.forEach(function(socket){
+            socket.sendUTF(chatDataAsString)
+        })
     })
     
 })
