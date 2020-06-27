@@ -334,6 +334,7 @@ app.post("/mdplost", function(req, res){
             length: 10,
             numbers: true
         });
+        console.log(password)
 
         let db = client.db(nameDb);
         let collection = db.collection("users");
@@ -346,7 +347,7 @@ app.post("/mdplost", function(req, res){
             }
             if(data[0].mail === eMail){
                 console.log(user.mdp);
-                user.mdp = password();
+                user.mdp = password;
 
                 console.log(mailOptionsMdp);
                 mailOptionsMdp.text= "Bonjour, voici votre nouveau mot de passe : "+ user.mdp +" . Veuillez penser à le modifier tout de suite après votre connexion"
