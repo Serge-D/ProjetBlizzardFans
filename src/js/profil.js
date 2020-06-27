@@ -14,7 +14,7 @@ var preferenceP = window.document.getElementById("profilPreference");
 
 window.addEventListener("DOMContentLoaded", function(){
 
-    ioClient = io("localhost:8080",{reconnection: true});
+    ioClient = io("",{reconnection: true});
 
     ioClient.on("connect",function(){
         console.log("Connecté au serveur");

@@ -166,7 +166,7 @@ MongoClient.connect(urlDb, {useUnifiedTopology: true}, function(err, client){
     if(err){
         console.log("error var user");
     }else{
-        let db = client.db("blizzardfans");
+        let db = client.db("Blizzardfans");
         let collection = db.collection("users");
         collection.find({}, {projection:{uuid:1, pseudo:1, mail:1, nom:1, prenom:1, genre:1, ville:1, preference:1, amis:1}}).toArray(function(err,data){
             if(err){
@@ -185,7 +185,7 @@ console.log(user)
 app.post("/inscription", function(req, res){
     MongoClient.connect(urlDb, {useUnifiedTopology: true}, function(err, client){
 
-        let db = client.db("blizzardfans");
+        let db = client.db("Blizzardfans");
         let collection = db.collection("users");
         if(err){
             console.log("erreur connection users")
@@ -200,7 +200,7 @@ app.post("/inscription", function(req, res){
                 if(data.length){
                     res.render("home",{message:"Adresse Mail déjà associée à un compte"})
                 }else{
-                    let db = client.db("blizzardfans");
+                    let db = client.db("Blizzardfans");
                     let collection = db.collection("users");
                     let pseudo = req.body.pseudo;
                     let mdp = req.body.motDePasse;
@@ -273,7 +273,7 @@ app.post("/connexion", function(req, res){
             })
         }
 
-        let db = client.db("blizzardfans");
+        let db = client.db("Blizzardfans");
         let collection = db.collection("users");
         let email = req.body.mail;
         let motDePasse = req.body.mdp;
