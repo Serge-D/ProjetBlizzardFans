@@ -381,7 +381,7 @@ app.get("/test", function(req, res){
  * 
  **************************/
 
-const serverHTTP = app.listen(8080, function(){
+const serverHTTP = app.listen(process.env.PORT || 8080, function(){
     console.log("Server is connected")
 });
 
