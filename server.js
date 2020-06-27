@@ -16,6 +16,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const nodemailer = require("nodemailer");
 const uuidv1 = require("uuidv1");
+const generator = require('generate-password');
 
 const app = express();
 
@@ -92,6 +93,11 @@ var transporter = nodemailer.createTransport({
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED ='0';
 
+var password = generator.generate({
+    length: 10,
+    numbers: true
+});
+
 var mailOptionsInscription = { //faire plusieurs var confirmation inscription
     from : "noreply@blizzardfansprojet.com",
     to: "",
@@ -108,8 +114,9 @@ var mailOptionsMdp = {
     from : "noreply@blizzardfansprojet.com",
     to: "",
     subject: "Mot de passe perdu",
-    text: "Bonjour, voici votre nouveau mot de passe : . Veuillez penser à le modifier tout de suite après votre connexion"
+    text: ""
 };
+
 var envoiMail = function(mailOptions){
     transporter.sendMail(mailOptions, function(error, info){
         if(error){
@@ -338,7 +345,7 @@ app.post("/mdplost", function(req, res){
             });
         }
 
-        
+
         let db = client.db(nameDb);
         let collection = db.collection("users");
         let eMail = req.body.mail;
@@ -346,12 +353,14 @@ app.post("/mdplost", function(req, res){
         collection.find({mail: eMail}).toArray(function(err, data){
             if(user.mail === eMail){
                 console.log(user.mdp);
-                user.mdp = mdprandom();
+                user.mdp = password();
 
                 console.log(mailOptionsMdp);
+                mailOptionsMdp.text= "Bonjour, voici votre nouveau mot de passe : "+ user.mdp +" . Veuillez penser à le modifier tout de suite après votre connexion"
                 mailOptionsMdp.to = eMail;
                 console.log(mailOptionsMdp);
                 envoiMail(mailOptionsMdp);
+ 
             }
         })
     })
