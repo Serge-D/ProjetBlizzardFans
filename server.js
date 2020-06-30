@@ -415,6 +415,9 @@ app.post("/modifProfil", function(req,res){
     })
 })
 
+/***************** GESTION DES PUBLICATIONS *********************/
+
+
 
 
 /**************** GESTION DES AMIS *****************/
@@ -602,6 +605,14 @@ webSocketServer.on("connect", function(socket){
         console.log(keyword);
         searchUSers(keyword)
     });
+
+
+
+
+
+
+
+
 
 })
 

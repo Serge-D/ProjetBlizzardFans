@@ -39,8 +39,8 @@ bouttonAnnulModif.addEventListener("click", function(){
 
 window.addEventListener("DOMContentLoaded", function(){
 
-    // ioClient = io("https://blizzardfans.herokuapp.com/",{reconnection: true});
-    ioClient = io("localhost:8080",{reconnection: true});
+    ioClient = io("https://blizzardfans.herokuapp.com/",{reconnection: true});
+    // ioClient = io("localhost:8080",{reconnection: true});
 
     ioClient.on("connect",function(){
         console.log("Connecté au serveur");
@@ -63,9 +63,11 @@ window.addEventListener("DOMContentLoaded", function(){
                 let searchlist = list;
                 console.log(searchlist[0].pseudo, searchlist[0].nom, searchlist[0].prenom);
                 
-                searchlist.forEach(function(index,value){
-                    console.log("/////"+index.pseudo)
-                    console.log(value)
+                searchlist.map(r =>{
+                    console.log("//"+r.nom)
+                    console.log(resultatRechercheUsers)
+                
+                    // resultatRechercheUsers.appendChild("coucou")
                     
                     
                 });
