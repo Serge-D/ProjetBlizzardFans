@@ -17,7 +17,12 @@ var resultatRechercheUsers = window.document.getElementById("resultatSearch");
 
 var bouttonModifProfil = window.document.getElementById("btnModif");
 var formModifProfil = window.document.getElementById("formModifProfil");
-var bouttonAnnulModif = window.document.getElementById("annulModif")
+var bouttonAnnulModif = window.document.getElementById("annulModif");
+
+var formChat = window.document.getElementById("formChat");
+// formChat.addEventListener("submit", function(event){
+//     event.preventDefault();
+// })
 
 formModifProfil.style.display = "none";
 
@@ -52,18 +57,32 @@ window.addEventListener("DOMContentLoaded", function(){
 
             ioClient.emit("searchingUsers", rechercheUsers.children[0].value)})
 
-        // ioClient.on("listUser", function(list){
+            ioClient.on("listUsers", function(list){
+                console.log(list)
 
-        //     while(resultatRechercheUsers.firstChild) resultatRechercheUsers.removeChild(resultatRechercheUsers.firstChild);
+                let searchlist = list;
+                console.log(searchlist[0].pseudo, searchlist[0].nom, searchlist[0].prenom);
+                
+                searchlist.forEach(function(index,value){
+                    console.log("/////"+index.pseudo)
+                    console.log(value)
+                    
+                    
+                });
+                
+            })
+        })
 
-        //     let listeUtilisateur = list;
+        /*************************************************/
 
-        //     listeUtilisateur.forEach(function(index, value){
 
-        //     })
+        // ioClient.on("message", function(event){
+        //     var chatData = JSON.parse(event.data);
+        //     console.log(chatData);
+
+        //     var divElement = window.document.getElementById("messages");
+        //     divElement.innerHTML += 
         // })
-
-
 
         /******************* messages client *******************************/
         // webSocket.addEventListener("message", function(event) {
@@ -95,7 +114,7 @@ window.addEventListener("DOMContentLoaded", function(){
         //   });
         // });
 
-    })
+    
 
 
 

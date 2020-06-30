@@ -132,7 +132,7 @@ var envoiMail = function(mailOptions){
     })
 };
 
-/***************** MIDDLEWARES ********************/
+/***************** MIDDLEWARES AVEC GESTION DES DROITS ********************/
 //utiliser pour les pages admins / invités / inscrits
 // app.use(function(req, res, next){
 //     if(req.url == "/" || req.url == "/inscription" || req.url == "/connexion" ){
@@ -153,23 +153,6 @@ var envoiMail = function(mailOptions){
 //             })
 //             next()
 //         }
-//     }
-// });
-
-// //Verification si l'utilisateur à toujours sa session active
-
-// app.get("/", function(req, res){
-//     if(req.cookies){
-//         MongoClient.connect(urlDb,{useUnifiedTopology: true}, function(err,client){
-
-//             let db = client.db("blizzardfans");
-//             let collection = db.collection("sessions");
-//             if(req.session.authentification === true){
-//                 res.redirect("/profil");
-//             }else{
-//                 res.redirect("/home");
-//             }
-//         })
 //     }
 // });
 
@@ -453,6 +436,7 @@ app.get("/amis", function(req, res){
         const result = user.filter(r => r.uuid == rEach)
         currentUserFriendsWaitingListData.push(result[0])
     });
+    console.log(currentUserFriendsWaitingListData)
     /*************confirm *************/
     const currentUserFriendsConfirmList = currentUserData[0].friends.confirm;
     const currentUserFriendsConfirmListData = [];
@@ -460,6 +444,8 @@ app.get("/amis", function(req, res){
         const result = user.filter(r => r.uuid == rEach)
         currentUserFriendsConfirmListData.push(result[0])
     });
+    console.log(currentUserFriendsConfirmList)
+    console.log(currentUserFriendsConfirmListData)
     /*************all users*************/
 
     const allUserListData = [];
@@ -545,7 +531,7 @@ webSocketServer.on("connect", function(socket){
     })
 
 
-/********************************************************* */
+/************************** DISCUSSION INSTANTANNEE ***************************** */
 
     socket.on("messages", function(webSocketData){
         var chatData = JSON.parse(webSocketData.utf8Data);
@@ -601,6 +587,7 @@ webSocketServer.on("connect", function(socket){
                         socket.emit("noresults",{msg: message})
                     }else{
                         socket.emit("listUsers", searchResults)
+                        console.log("envoyé")
                     }
 
                     } 

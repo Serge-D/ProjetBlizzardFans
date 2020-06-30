@@ -17,20 +17,21 @@ header.bg-secondary.p-2
         button.btn.bg-light.my-2.my-sm-0(type='submit') Chercher
       button.btn.btn-danger.btn-sm.ml-4
         a.text-white(href="/logout") D&eacute;connexion
-h1 Chat WebSocket
-form#formulaire
-  p=pseudonyme
-  p
-    | Message : 
-    textarea(name='message')
-  p
-    input(type='submit', value='Envoyer')
-#messages
-  //- each document in documents
-  //-   p
-  //-      b=pseudonyme
-  //-      dit : 
-  //-      i=document.message
+#fenetreDeChat.col-lg-6
+  h1 Discussion instantannée
+  form#formChat
+    p=pseudonyme
+    p
+      | Message : 
+      textarea(name='message')
+    p
+      input(type='submit', value='Envoyer')
+  #messages
+    //- each document in documents
+    //-   p
+    //-      b=pseudonyme
+    //-      dit : 
+    //-      i=document.message
 
 
 script(src="/js/profil.js")

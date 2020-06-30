@@ -24,22 +24,22 @@ section
         .card-header.text-center
           h3 Demandes d'amis en attente
         .card-body  
-          - for (var i = 0; i < currentUserFriendsWaitingListData.length; ++i) {
+          - for (var i = 0; i <= currentUserFriendsWaitingListData.length; ++i) {
               ul= "En attente"
                   li= currentUserFriendsWaitingListData[i]["pseudo"]
                   li= currentUserFriendsWaitingListData[i]["nom"] ,currentUserFriendsWaitingListData[i]["prenom"]
           - }
-  //- .container-fluid
-  //-   .row.justify-content-around
-  //-     .card.mt-4.p-0
-  //-       .card-header.text-center
-  //-         h3 Liste d'amis
-  //-       .card-body  
-  //-         - for (var i = 0; i < currentUserFriendsConfirmListData.length; ++i) {
-  //-             ul= "Amis"
-  //-                 li= currentUserFriendsConfirmListData[i]["pseudo"]
-  //-                 li= currentUserFriendsConfirmListData[i]["nom"] ,currentUserFriendsConfirmListData[i]["prenom"]
-  //-         - }
+  .container-fluid
+    .row.justify-content-around
+      .card.mt-4.p-0
+        .card-header.text-center
+          h3 Liste d'amis
+        .card-body  
+          - for (var i = 0; i <= currentUserFriendsConfirmListData.length; ++i) {
+              ul= "Amis"
+                  li= currentUserFriendsConfirmListData[i]["pseudo"]
+                  li= currentUserFriendsConfirmListData[i]["nom"] ,currentUserFriendsConfirmListData[i]["prenom"]
+          - }
     .container-fluid
     .row.justify-content-around
       .card.mt-4.p-0
