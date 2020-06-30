@@ -16,8 +16,8 @@ header.bg-secondary.p-4
       .card-body
           form(action='connexion' method='POST')
             .form-group
-              label(for='mail') Adresse e-mail
-              input.form-control(type='email' name='mail')
+              label(for='pseudo') Pseudo
+              input.form-control(type='text' name='pseudo')
             .form-group
               label(for='mdp') Mot de passe
               input.form-control(type='password' name='mdp')
@@ -66,5 +66,6 @@ header.bg-secondary.p-4
               option(value='Warcraft III') Warcraft III
           button.btn.bg-secondary.text-white(type='submit') S&apos;inscrire
         p.text-danger.mt-1= message
-
+footer.bg-secondary.p-1.mt-1.text-right
+  a.text-white(href="/apropos") A propos
 include includes/footer.pug

@@ -12,9 +12,10 @@ header.bg-secondary.p-2
           a.nav-link(href='/profil') Profil
         li.nav-item
           a.nav-link(href='/messages') Messages
-      form.form-inline.my-2.my-md-0(action='' method='GET')
-        input.form-control.mr-sm-2(type='search' name='' placeholder='Chercher' aria-label='Search')
+      form.form-inline.my-2.my-md-0(action='' method='GET' id="searchBar")
+        input.form-control.mr-sm-2(type='search' name='searchUser' placeholder='Chercher' aria-label='Search' id="searchUser")
         button.btn.bg-light.my-2.my-sm-0(type='submit') Chercher
+      #resultatSearch
       button.btn.btn-danger.btn-sm.ml-4
         a.text-white(href="/logout") D&eacute;connexion
 .container-fluid
@@ -39,5 +40,6 @@ header.bg-secondary.p-2
               input.form-control(type='text' name='nouvelleActu' placeholder='Que voulez vous partager')
       .card.mt-1.p-0
         .card-body
-          | Lorem ipsum dolor, sit amet consectetur adipisicing elit. Adipisci animi praesentium ea hic ex obcaecati vel, ipsa ducimus iure doloremque sed quibusdam quae, quos atque ipsum, consectetur autem perferendis alias?
           
+          
+include includes/footer.pug

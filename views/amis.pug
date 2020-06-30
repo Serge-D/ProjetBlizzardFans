@@ -1,12 +1,5 @@
-doctype html
-head
-  meta(charset='UTF-8')
-  meta(name='viewport' content='width=device-width, initial-scale=1, shrink-to-fit=no')
-  link(rel='stylesheet' href='https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css' integrity='sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk' crossorigin='anonymous')
-  link#bootstrap-css(href='//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css' rel='stylesheet')
-  script(src='//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js')
-  script(src='//code.jquery.com/jquery-1.11.1.min.js')
-  title accueil
+include includes/header.pug
+
 header.bg-secondary.p-2
   nav.navbar.navbar-expand-lg.navbar-dark
     .navbar-brand
@@ -14,28 +7,49 @@ header.bg-secondary.p-2
     .container
       ul.navbar-nav.mr-auto
         li.nav-item
-          a.nav-link(href='/accueil') Accueil
+          a.nav-link(href='#') Accueil
         li.nav-item
           a.nav-link(href='/profil') Profil
         li.nav-item
           a.nav-link(href='/messages') Messages
-      form.form-inline.my-2.my-md-0(action='searchBar' method='GET')
-        input.form-control.mr-sm-2(type='search' name='' placeholder='Chercher' aria-label='Search')
+      form.form-inline.my-2.my-md-0(action='' method='GET' id="searchBar")
+        input.form-control.mr-sm-2(type='search' name='searchUser' placeholder='Chercher' aria-label='Search' id="searchUser")
         button.btn.bg-light.my-2.my-sm-0(type='submit') Chercher
       button.btn.btn-danger.btn-sm.ml-4
         a.text-white(href="/logout") D&eacute;connexion
 section
-  .container.mt-4(style='')
-    .row
-      .span5
-        table.table.table-striped.table-condensed
-          thead
-            tr
-              th Nom
-              th Prenom
-              th Pseudo
-              th Statut
-          tbody
-            div=test
-            div=test
-            div=test
+  .container-fluid
+    .row.justify-content-around
+      .card.mt-4.p-0
+        .card-header.text-center
+          h3 Demandes d'amis en attente
+        .card-body  
+          - for (var i = 0; i < currentUserFriendsWaitingListData.length; ++i) {
+              ul= "En attente"
+                  li= currentUserFriendsWaitingListData[i]["pseudo"]
+                  li= currentUserFriendsWaitingListData[i]["nom"] ,currentUserFriendsWaitingListData[i]["prenom"]
+          - }
+  //- .container-fluid
+  //-   .row.justify-content-around
+  //-     .card.mt-4.p-0
+  //-       .card-header.text-center
+  //-         h3 Liste d'amis
+  //-       .card-body  
+  //-         - for (var i = 0; i < currentUserFriendsConfirmListData.length; ++i) {
+  //-             ul= "Amis"
+  //-                 li= currentUserFriendsConfirmListData[i]["pseudo"]
+  //-                 li= currentUserFriendsConfirmListData[i]["nom"] ,currentUserFriendsConfirmListData[i]["prenom"]
+  //-         - }
+    .container-fluid
+    .row.justify-content-around
+      .card.mt-4.p-0
+        .card-header.text-center
+          h3 Autres utilisateurs
+        .card-body  
+          - for (var i = 0; i < allUserDataList.length; ++i) {
+              ul= "Amis"
+                  li= allUserDataList[i]["pseudo"]
+                  li= allUserDataList[i]["nom"] ,allUserDataList[i]["prenom"]
+          - }
+
+include includes/footer.pug

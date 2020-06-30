@@ -17,11 +17,21 @@ const cookieParser = require("cookie-parser");
 const nodemailer = require("nodemailer");
 const uuidv1 = require("uuidv1");
 const generator = require('generate-password');
+const cors = require("cors");
+const helmet = require("helmet")
 
 const app = express();
 
 app.set("view engine","pug");
 
+app.use(helmet())
+app.use(helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'" ,'fonts.gstatic.com',"github.com","cdnjs.cloudflare.com"],
+      styleSrc: ["'self'","stackpath.bootstrapcdn.com",'fonts.gstatic.com']
+    }
+  }))
+app.use(cors());
 app.use(bodyParser.urlencoded({
     extended: false
 }));
@@ -42,7 +52,9 @@ app.get("/messages", function(req, res){
 app.get("/mdplost", function(req, res){
     res.render("mdpPerdu");
 });
-
+app.get("/apropos", function(req, res){
+    res.render("apropos");
+});
 
 /************************ Configuration Session **************************/
 
@@ -123,7 +135,7 @@ var envoiMail = function(mailOptions){
 /***************** MIDDLEWARES ********************/
 //utiliser pour les pages admins / invités / inscrits
 // app.use(function(req, res, next){
-//     if(req.url == "/" || req.url == "/inscription" || req.url == "/connexion" || req.url == "/amis"){
+//     if(req.url == "/" || req.url == "/inscription" || req.url == "/connexion" ){
 //         next()
 //     }else{
 //         if (!req.session.userName) {
@@ -171,7 +183,7 @@ MongoClient.connect(urlDb, {useUnifiedTopology: true}, function(err, client){
     }else{
         let db = client.db("Blizzardfans");
         let collection = db.collection("users");
-        collection.find({}, {projection:{uuid:1, pseudo:1, mail:1, nom:1, prenom:1, genre:1, ville:1, preference:1, amis:1}}).toArray(function(err,data){
+        collection.find({}, {projection:{uuid:1, pseudo:1, mail:1, nom:1, prenom:1, genre:1, ville:1, preference:1, friends:1}}).toArray(function(err,data){
             if(err){
                 console.log("error find of var user");
             }else{
@@ -257,7 +269,7 @@ app.post("/inscription", function(req, res){
                             console.log(mailOptionsInscription);
                             envoiMail(mailOptionsInscription);
 
-                            res.redirect("/accueil");
+                            res.render("profil",{pseudo:pseudo, nom:nom, prenom:prenom, mail:mail, ville:ville,preference:preference, genre:genre });
 
                         }
                     })
@@ -274,7 +286,7 @@ app.post("/connexion", function(req, res){
         if(err){
             console.log("error connect");
         }
-        if(req.body.mail === "" || req.body.mdp === ""){
+        if(req.body.pseudo === "" || req.body.mdp === ""){
             res.render("home",{
                 info:"Veuillez saisir les informations"
             })
@@ -282,19 +294,20 @@ app.post("/connexion", function(req, res){
 
         let db = client.db("Blizzardfans");
         let collection = db.collection("users");
-        let email = req.body.mail;
+        let pseudo = req.body.pseudo;
         let motDePasse = req.body.mdp;
 
-        collection.find({mail : email}).toArray(function(err, data){
+        collection.find({pseudo : pseudo}).toArray(function(err, data){
             console.log(data)
             if(err || data.length === 0){
                 console.log("erreur niveau connexion");
+                res.render("home",{info:"Identifians incorrects"});
             }else{
                 let user = data[0];
                 console.log(data[0]);
 
-                if(user.mdp === motDePasse && user.mail === email){
-                    console.log(user.mail, user.mdp)
+                if(user.mdp === motDePasse && user.pseudo === pseudo){
+                    console.log(user.pseudo, user.mdp)
                     req.session.userName = user.nom;
                     req.session.userForname = user.prenom;
                     req.session.userPseudo = user.pseudo;
@@ -306,7 +319,7 @@ app.post("/connexion", function(req, res){
                         httpOnly: false
                     });
 
-                    res.render("murActu");
+                    res.render("profil",{pseudo:data[0].pseudo,nom:data[0].nom, prenom:data[0].prenom, mail:data[0].mail, ville:data[0].ville,preference:data[0].preference });
                 }else{
                     res.render("home",{
                         info:"Identifians incorrects"
@@ -350,13 +363,15 @@ app.post("/mdplost", function(req, res){
                 user.mdp = password;
 
                 console.log(mailOptionsMdp);
-                mailOptionsMdp.text= "Bonjour, voici votre nouveau mot de passe : \n"+ user.mdp +" Veuillez penser à le modifier tout de suite après votre connexion"
+                mailOptionsMdp.text= "Bonjour, voici votre nouveau mot de passe : "+ user.mdp +"\nVeuillez penser à le modifier tout de suite après votre connexion"
                 mailOptionsMdp.to = eMail;
                 console.log(mailOptionsMdp);
                 envoiMail(mailOptionsMdp);
                 console.log(data[0].mail)
+                
+                collection.updateOne({mail:eMail},{$set:{mdp:password}})
 
-                res.redirect("home")
+                res.render("home",{info:"Un nouveau mot de passe a été envoyé par mail"})
             }
         })
     })
@@ -376,28 +391,83 @@ app.get("/profil", function(req,res){
             if(err){
                 console.log("Error !")
             }
-            
-            res.render("profil",{pseudo:data[0].pseudo,nom:data[0].nom, prenom:data[0].prenom, mail:data[0].mail, ville:data[0].ville,preference:data[0].preference });
+
+            res.render("profil",{pseudo:data[0].pseudo,nom:data[0].nom, prenom:data[0].prenom, mail:data[0].mail,genre:data[0].genre, ville:data[0].ville,preference:data[0].preference});
+            return;
         })
     })
     
 });
 
+/****************** GESTION MODIF PROFIL *********************/
+
+app.post("/modifProfil", function(req,res){
+    MongoClient.connect(urlDb,{useUnifiedTopology: true}, function(err, client){
+        if(err){
+            console.log("erreur connect pour modif profil");
+        }
+        let db = client.db(nameDb);
+        let collection = db.collection("users");
+        let uuidCurrentUser = req.session.uuid;
+        collection.find({uuid: uuidCurrentUser}).toArray(function(err, data){
+            if(err){
+                console.log("uuid not found for modifProfil")
+            }else{
+                let modifpseudo = req.body.pseudo;
+                let modifmdp = req.body.motDePasse;
+                let modifville = req.body.ville;
+                let modifpreference = req.body.preference;
+
+                collection.updateOne({uuid:uuidCurrentUser},{$set:{pseudo:modifpseudo,   mdp:modifmdp, ville:modifville, preference:modifpreference}});
+
+                collection.find({uuid: uuidCurrentUser}).toArray(function(err,data){
+                    if(err){
+                        console.log("collection not found after update")
+                    }
+                    console.log(data)
+                    res.render("profil",{pseudo:data[0].pseudo,nom:data[0].nom, prenom:data[0].prenom, mail:data[0].mail, ville:data[0].ville,preference:data[0].preference });
+                })
+            }
+        })
+    })
+})
+
+
 
 /**************** GESTION DES AMIS *****************/
-var test = function(){
-    var li = window.document.createElement("li")
-}
+
+
 app.get("/amis", function(req, res){
-    res.render("amis",{test: test()});
-    console.log(user);
-    // faire le filter waiting / confirm / ignore ici
+    
+    const allUser = user
+    const currentUserUuid = req.session.uuid
+    const currentUserData = user.filter(r => r.uuid == currentUserUuid)
+    // const currentUserData = user.filter(r => r.uuid != currentUserUuid)
+    // ["uuid.friends.confirm"].forEach((rEach) => {
+     //   user.filter(r => r.uuid != rEach)
+    // })
+    /*************waiting ***********/
+    const currentUserFriendsWaitingList = currentUserData[0].friends.waiting;
+    const currentUserFriendsWaitingListData = [];
+    currentUserFriendsWaitingList.forEach((rEach) => {
+        const result = user.filter(r => r.uuid == rEach)
+        currentUserFriendsWaitingListData.push(result[0])
+    });
+    /*************confirm *************/
+    const currentUserFriendsConfirmList = currentUserData[0].friends.confirm;
+    const currentUserFriendsConfirmListData = [];
+    currentUserFriendsConfirmList.forEach((rEach) => {
+        const result = user.filter(r => r.uuid == rEach)
+        currentUserFriendsConfirmListData.push(result[0])
+    });
+    /*************all users*************/
 
-});
+    const allUserListData = [];
+    // const allUserListuser.filter(r => r.uuid != currentUserUuid)
 
-
-app.get("/test", function(req, res){
-    res.render("test",{test:user})
+    
+    // const currentUserFriendsWaitingListData = user.filter(r => r.uuid == currentUserFriendsWaitingList[0])
+    res.render("amis",{currentUserData:currentUserData, currentUserFriendsWaitingListData:currentUserFriendsWaitingListData.filter(Boolean), currentUserFriendsConfirmList:currentUserFriendsConfirmList.filter(Boolean)})
 })
 
 
@@ -407,7 +477,7 @@ app.get("/test", function(req, res){
 
 app.get("/logout", function(req, res){
     req.session.destroy(function(err){
-        console.log("error destroy session");
+        console.log("destroy session");
         res.render("home");
     })
 });
@@ -473,16 +543,6 @@ webSocketServer.on("connect", function(socket){
         console.log(utilisateur)
         connectedPeople.push(utilisateur)
     })
-/******************************************************** */
-    socket.emit("infosUser", function(){
-        MongoClient.connect(urlDb, {useUnifiedTopology:true}, function(err, client){
-            if(err){
-                console.log("pb de connexion")
-            }
-            let db = client.db(nameDb);
-            let collection = db.collection("user");
-        })
-    });
 
 
 /********************************************************* */
@@ -511,6 +571,51 @@ webSocketServer.on("connect", function(socket){
         })
     })
     
+
+    /**************GESTION SEARCH BAR *******************/
+
+    let searchUSers = function(keyword){
+        console.log("in function search")
+    
+
+        MongoClient.connect(urlDb, {useUnifiedTopology: true}, function(err, client){
+            if(err){
+                console.log("erreur connexion mongo pour la recherche user");
+            }else{
+                console.log("recherche d'user");
+                const db = client.db(nameDb);
+                const collection = db.collection("users");
+                collection.find({$or:[{prenom:{ $regex: keyword, $options:"i" }},{nom:{ $regex: keyword, $options:"i" }},{pseudo:{ $regex: keyword, $options:"i" }}]}, {projection:{pseudo:1, nom:1, prenom:1, _id:0}}).toArray(function(err, data){
+                    if(err){
+                        console.log("error dans la recherche");
+                    }else{
+                        console.log("dans la recherche");
+                        let searchResults = data;
+                        console.log(data);
+                        console.log(searchResults.length);
+                        
+
+                    if(!data){
+                        console.log("aucun resultat pour cette recherche");
+                        let message = "Aucun résultat pour votre recherche";
+                        socket.emit("noresults",{msg: message})
+                    }else{
+                        socket.emit("listUsers", searchResults)
+                    }
+
+                    } 
+                })
+            }
+        })
+    }
+
+
+
+    socket.on("searchingUsers", function(keyword){
+        console.log(keyword);
+        searchUSers(keyword)
+    });
+
 })
 
 

@@ -12,16 +12,16 @@ header.bg-secondary.p-2
           a.nav-link(href='/profil') Profil
         li.nav-item
           a.nav-link(href='/messages') Messages
-      form.form-inline.my-2.my-md-0(action='searchBar' method='GET')
-        input.form-control.mr-sm-2(type='search' name='' placeholder='Chercher' aria-label='Search')
+      form.form-inline.my-2.my-md-0(action='searchBar' method='GET' id="searchBar")
+        input.form-control.mr-sm-2(type='search' name='' placeholder='Chercher' aria-label='Search' id="searchUser")
         button.btn.bg-light.my-2.my-sm-0(type='submit') Chercher
       button#btndisconnect.btn.btn-danger.btn-sm.ml-4
           a.text-white(href="/logout") D&eacute;connexion
-.card.mb-1.mt-2.container.pb-2(style='max-width: 540px;')
+.card.mb-1.mt-2.container.pb-2(style='width: 540px')
   .row.no-gutters
     .col-md-4
-      
-    .col-md-8
+      //- input#ajoutphoto(type="file", name="photo")
+    .col-md-5
       .card-body
         #profilPseudo.card-title=pseudo 
         div
@@ -31,21 +31,53 @@ header.bg-secondary.p-2
         #profilMail=mail 
         #profilVille=ville 
         #profilPreference=preference  
+        button#btnModif.btn.btn-secondary.mt-1 Modifier le profil
+
+#formModifProfil.card.mt-4.border-secondary.p-0.col-lg-5.container(style='absolute')
+      h3.card-header.bg-dark.text-white Modifier votre Profil
+      .card-body
+        form(action='modifProfil' method='POST')
+          .form-group
+            label(for='pseudo') Pseudo
+            input.form-control(type='text' name='pseudo')
+          .form-group
+            label(for='ville') Ville
+            input.form-control(type='text' name='ville')
+          .form-group
+            label(for='motDePasse') Mot de passe
+            input.form-control(type='password' name='motDePasse' placeholder='Créer votre mot de passe')
+          .form-group
+            label(for='preference') Pr&eacute;f&eacute;rence
+            select#pref.custom-select(name='preference')
+              option(selected='') Choissisez votre jeu Blizzard pr&eacute;f&eacute;r&eacute;
+              option(value='World of Warcraft') World of Warcraft
+              option(value='HearthStone') HearthStone
+              option(value='Diablo') Diablo
+              option(value='StarCraft') StarCraft
+              option(value='Heroes of the Storm') Heroes of the Storm
+              option(value='Owerwatch') Owerwatch
+              option(value='Warcraft III') Warcraft III
+          button.btn.bg-secondary.text-white(type='submit') Modifier
+        button#annulModif.btn.bg-secondary.text-white.mt-1 Annuler
+
 .container-fluid
   .row.justify-content-around
-    section.col-md-4
+    section.col-lg-2
       .card.mt-4.p-0
-        .card-header.bg-secondary
-          | Amis
+        .card-header.bg-secondary.text-white.text-center
+          | Menu
         .card-body
-          | Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nisi consequuntur voluptates necessitatibus, dicta dignissimos tempora quia cumque hic sit, odio illum excepturi officiis quam sapiente sunt, placeat dolores temporibus eligendi.
-          | Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, hic! Consequuntur et quidem vel voluptas molestiae voluptate obcaecati dolorum inventore, adipisci perferendis. Dicta iste amet perspiciatis necessitatibus sapiente deserunt possimus.
+          div
+            a.btn.btn-block.btn-secondary.text-light(href='/accueil' role='button') Accueil
+          div
+            a.btn.mt-1.btn-block.btn-secondary.text-light(href='/messages' role='button') Messages
+          div
+            a.btn.mt-1.btn-block.btn-secondary.text-light(href='/amis' role='button') Amis  
       .card.mt-4.p-0
         .card-header.bg-primary
-          | Photos
+          | Amis
         .card-body
-          | Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nisi consequuntur voluptates necessitatibus, dicta dignissimos tempora quia cumque hic sit, odio illum excepturi officiis quam sapiente sunt, placeat dolores temporibus eligendi.
-          | Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium, hic! Consequuntur et quidem vel voluptas molestiae voluptate obcaecati dolorum inventore, adipisci perferendis. Dicta iste amet perspiciatis necessitatibus sapiente deserunt possimus.
+          
     section.col-lg-6
       .card.mt-4.p-0
         .card-header
@@ -56,10 +88,6 @@ header.bg-secondary.p-2
               label(for='actuProfil') Nouvelle Publification
               input.form-control(type='text' name='actuProfil' placeholder='Que voulez vous dire')
         .card-body
-          | Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum, atque excepturi commodi quaerat magnam mollitia hic consectetur rem amet porro omnis, facilis veritatis doloremque voluptatum odit, exercitationem ipsam iure temporibus!
-          | Libero, voluptates harum. Optio qui, dolor doloremque minima, dolorum obcaecati quia nemo quo corporis, cupiditate in magni rem laudantium. Laboriosam quia fugit ducimus in impedit aperiam porro explicabo cumque soluta.
-          | Veniam consequuntur aspernatur modi aut obcaecati rem, harum velit et illum molestias laudantium vitae eligendi animi sit placeat ducimus! Adipisci quibusdam alias ea omnis consequatur, aut deleniti doloribus soluta sed?
-          | Ratione impedit alias numquam nisi! Qui animi nisi eos ipsum illum accusamus porro corrupti fugit. Ipsam, dolorum dolores esse delectus labore dolore, dignissimos expedita, illo deleniti cupiditate error provident veniam.
-          | Non error totam, sapiente quasi, reiciendis, debitis soluta nesciunt pariatur tempora necessitatibus adipisci amet voluptate laborum. Sequi, excepturi optio ipsum, velit provident at, repudiandae rem officiis ipsam expedita odio incidunt.
+          
 
 include includes/footer.pug
