@@ -134,27 +134,32 @@ var envoiMail = function(mailOptions){
 
 /***************** MIDDLEWARES AVEC GESTION DES DROITS ********************/
 //utiliser pour les pages admins / invités / inscrits
-// app.use(function(req, res, next){
-//     if(req.url == "/" || req.url == "/inscription" || req.url == "/connexion" ){
-//         next()
-//     }else{
-//         if (!req.session.userName) {
-//             console.log("test")
-//             res.cookie("user_id", "", {
-//                 expires: new Date(Date.now() + 900000),
-//                 httpOnly: false
-//             })
-//             res.redirect("/home")
-//         } else {
-//             console.log("test2")
-//             res.cookie("user_id", req.session.uuid, {
-//                 expires: new Date(Date.now() + 900000),
-//                 httpOnly: false
-//             })
-//             next()
-//         }
-//     }
-// });
+app.use(function(req, res, next){
+    if(req.url == "/" || req.url == "/inscription" || req.url == "/connexion" ){
+        next()
+    }else{
+        if (!req.session.userName) {
+            console.log("test")
+            res.cookie("user_id", "", {
+                expires: new Date(Date.now() + 900000),
+                httpOnly: false
+            })
+            res.redirect("/home")
+        } else {
+            console.log("test2")
+            res.cookie("user_id", req.session.uuid, {
+                expires: new Date(Date.now() + 900000),
+                httpOnly: false
+            })
+            next()
+        }
+    }
+});
+ app.use(function(req, res){
+     if(req.session.role != "Admin" && req.session.role != "Utilisateur"){
+            res.render("home")
+     }
+ })
 
 /******************* DEFINITION D'UNE VARIABLE USER ******************/
 
@@ -417,6 +422,28 @@ app.post("/modifProfil", function(req,res){
 
 /***************** GESTION DES PUBLICATIONS *********************/
 
+app.post("/nouvelleactu", function(req,res){
+    
+
+    MongoClient.connect(urlDb, {useUnifiedTopology: true}, function(err,client){
+        let db= client.db(nameDb);
+        let collection = db.collection("actualites");
+
+        let nouvelleactu = req.body.nouvelleactu;
+        let sender = req.session.userPseudo;
+        let insertion = {};
+
+        insertion.actualite = nouvelleactu;
+        insertion.sender = sender;
+
+        collection.insertOne(insertion, function(err, client){
+            if(err){
+                console.log("erreur d'insertion actualité")
+            }
+
+        })
+    })
+})
 
 
 

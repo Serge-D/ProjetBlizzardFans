@@ -83,10 +83,11 @@ header.bg-secondary.p-2
         .card-header
           h6 Publications
         .card-body
-          form(action='' method='POST')
+          form(action='nouvelleactu' method='POST')
             .form-group
               label(for='actuProfil') Nouvelle Publification
-              input.form-control(type='text' name='actuProfil' placeholder='Que voulez vous dire')
+              input.form-control(type='text' name='nouvelleactu' placeholder='Que voulez vous dire')
+              input(type="submit", value="envoyer") Envoyer
         .card-body
           
 

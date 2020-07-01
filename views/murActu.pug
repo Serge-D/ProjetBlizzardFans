@@ -34,10 +34,11 @@ header.bg-secondary.p-2
         .card-header.text-center
           h3 Mur d&apos;actualit&eacute;s
         .card-body
-          form(action='' method='POST')
+          form(action='nouvelleaction' method='POST')
             .form-group
               label(for='nouvelleActu') Nouvelle Actualit&eacute;
               input.form-control(type='text' name='nouvelleActu' placeholder='Que voulez vous partager')
+              input(type="submit", value="envoyer") Envoyer
       .card.mt-1.p-0
         .card-body
           
